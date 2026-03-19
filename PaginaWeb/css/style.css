@@ -2,6 +2,7 @@ body{
     background: url(../image/ie5uinl8cqaf1.png);
     background-repeat: no-repeat;
     background-size: cover;
+    background-attachment: fixed;
 }
 
 .container{
@@ -23,4 +24,12 @@ body{
     padding: 10px;
     color: aqua;
     font-size: 30;
+}
+.item:hover{
+    background-color: rgb(106, 47, 145);
+    font-size: 75px;
+    width: 300px;
+    height: 300;
+    cursor: pointer;
+    transition: all 0.6s ease;
 }
