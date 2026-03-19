@@ -1,0 +1,26 @@
+body{
+    background: url(../image/ie5uinl8cqaf1.png);
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    height: 930px;
+    border: solid 1px;
+    }
+
+.item{
+
+    width: 100px;
+    height: 100px;
+    background-color: brown;
+    border: solid 1px;
+    margin: 10px;
+    padding: 10px;
+    color: aqua;
+    font-size: 30;
+}
