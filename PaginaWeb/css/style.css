@@ -15,7 +15,6 @@ body{
     }
 
 .item{
-
     width: 100px;
     height: 100px;
     background-color: brown;
@@ -25,6 +24,7 @@ body{
     color: aqua;
     font-size: 30;
 }
+
 .item:hover{
     background-color: rgb(106, 47, 145);
     font-size: 75px;
