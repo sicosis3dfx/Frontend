@@ -7,7 +7,6 @@ body {
   align-items: center;
 }
 
-/* NAV carrusel */
 .nav-carrusel {
   position: relative;
   width: 100vw;
@@ -74,7 +73,6 @@ body {
   min-width: 150px;
 }
 
-/* CONTENIDO PRINCIPAL */
 #section2 {
  
   width: 90%;
@@ -104,7 +102,6 @@ body {
   padding: 20px 30px;
 }
 
-/* ESTILOS SECCIONES */
 header {  
   height: auto;
   width: auto;
@@ -131,12 +128,10 @@ footer {
   box-shadow: 0 -2px 5px rgba(0,0,0,0.1);
 }
 
-/* OCULTAR ELEMENTOS */
 .oculto {
   display: none;
 }
 
-/* RESPONSIVE */
 @media (max-width: 768px) {
   .hamburguesa {
     display: block !important;

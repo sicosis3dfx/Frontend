@@ -4,10 +4,10 @@ function toggleMenu() {
     }
 
 const imagenes = [
-  "source/img/onepiece.jpg",
-  "source/img/nakamas.jpg",
-  "source/img/nakamasV.2.jpg",
-  "source/img/nakamasV.3.jpg"
+  "source/img/ie5uinl8cqaf1.png",
+  "source/img/mmmaverick_4x.png",
+  "source/img/megaman-background-j6rgyc9yuki4tog3_4x.png",
+  "source/img/megamanx5banner_4x.png"
 ];
 let indice = 0;
 
