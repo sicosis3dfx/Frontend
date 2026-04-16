@@ -49,9 +49,19 @@ function iniciarCarruselAutomatico(){
 let modoEdicion = false;
 let indiceEdicion = null;
 
+function cargarFooter(){
+  fetch("html/footer.html")
+  .then(response => response.text())
+  .then(data =>{
+    document.getElementById("footer-container").innerHTML = data;
+  })
+  .catch(error => console.error("Error al cargar el footer", error));
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   actualizarImagen();
   iniciarCarruselAutomatico();
+  cargarFooter();y
 
   const form = document.getElementById('formContacto');
   const mensaje = document.getElementById('mensajeGuardado');
