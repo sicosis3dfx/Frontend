@@ -1,19 +1,28 @@
-function cargarComponentes(id, archivo){
-    const subcarpeta = window.location.pathname.includes("/pages/");
-    const ruta = subcarpeta
-    ? `../components/${archivo}`
-    :`components/${archivo}`;
+function cargarNav(){
+    let rutaAbsoluta = window.location.pathname.includes("/pages/")
+    ? "../components/nav.html"
+    : "components/nav.html";
 
-    fetch(ruta)
-    .then((res=> res.text()))
-    .then((html) => {
-        document.getElementById(id).innerHTML = html
+    fetch(rutaAbsoluta)
+    .then(res => res.text())
+    .then(data => {
+        document.getElementById("nav-container").innerHTML = data
     })
-    .catch(() => console.warn(`No se cargo el ${archivo}`));
+}
 
+function cargarFooter(){
+    let rutaAbsoluta = window.location.pathname.includes("/pages/")
+    ? "../components/footer.html"
+    : "components/footer.html";
+
+    fetch(rutaAbsoluta)
+    .then(res => res.text())
+    .then(data => {
+        document.getElementById("footer-container").innerHTML = data
+    })
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-    cargarComponentes("nav-container", "nav.html");
-    cargarComponentes("footer-container", "footer.html");
+    cargarNav();
+    cargarFooter();
 })
