@@ -28,19 +28,27 @@
                             <label class="form-label fw-bold">Nombre Mascota</label>
                             <input type="text" id="nombreMascota" class="form-control" 
                                    placeholder="Ingresa el nombre de la mascota" maxlength="120" required>
+                            <small id="errorNombre" class="text-danger error-campo"></small>
                         </div>
 
                         <div class="mb-3">
                             <label class="form-label fw-bold">Dueño</label>
                             <input type="text" id="nombreDueno" class="form-control" 
                                    placeholder="Ingresa el nombre del dueño" maxlength="120" required>
+                            <small id="errorDueno" class="text-danger error-campo"></small>
                         </div>
-
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Teléfono</label>
+                            <input type="tel" id="telefonoDueno" class="form-control" 
+                                placeholder="Ej: 56912345678" maxlength="15" required>
+                            <small id="errorTelefono" class="text-danger error-campo"></small>
+                        </div>
                         <div class="row">
                             <div class="col-6 mb-3">
                                 <label class="form-label fw-bold">Edad (años)</label>
                                 <input type="number" id="edadMascota" class="form-control" 
                                        placeholder="0-30" min="0" max="30" required>
+                                <small id="errorEdad" class="text-danger error-campo"></small>
                             </div>
                             <div class="col-6 mb-3">
                                 <label class="form-label fw-bold">Tipo</label>
@@ -69,6 +77,7 @@
                                 <tr>
                                     <th>Mascota</th>
                                     <th>Dueño</th>
+                                    <th>Teléfono</th>
                                     <th>Edad</th>
                                     <th>Tipo</th>
                                     <th class="text-end">Acciones</th>
