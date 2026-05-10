@@ -4,10 +4,10 @@ let editando = false;
 let idEditando = null;
 
 const imgs = [
-    "source/img/ie5uinl8cqaf1.png",
-    "source/img/mmmaverick_4x.png",
-    "source/img/megaman-background-j6rgyc9yuki4tog3_4x.png",
-    "source/img/megamanx5banner_4x.png"
+    "source/img/1.png",
+    "source/img/2.png",
+    "source/img/3.png",
+    "source/img/4.png"
 ];
 let idImg = 0;
 
