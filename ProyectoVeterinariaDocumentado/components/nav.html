@@ -1,16 +1,67 @@
+<!-- 
+  NAV: Barra de navegación principal con Bootstrap 5.
+  Componentes utilizados: Navbar, Toggler, Collapse.
+-->
+
+<!-- 
+  <nav> elemento semántico de navegación.
+  Clases de Bootstrap:
+    navbar         -> Estilo base de barra de navegación
+    navbar-expand-lg -> A partir de pantallas grandes (lg) el menú se expande horizontalmente;
+                        en pantallas más chicas se colapsa (hamburguesa)
+    navbar-dark    -> Temas oscuros para el texto (letras claras)
+    bg-dark        -> Fondo oscuro
+    p-3            -> Padding (espaciado interior) de 3 (1rem, equivalente a 16px aprox.)
+-->
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark p-3">
+    <!-- 
+      .container -> Contenedor centrado con ancho máximo fijo según breakpoint.
+      Aporta padding lateral automático y alinea el contenido.
+    -->
     <div class="container">
+        <!-- 
+          .navbar-brand -> Marca/logo de la barra.
+          .fw-bold -> Texto en negrita (font-weight bold).
+          href="/index.html" -> Enlace a la página principal.
+          El texto incluye un emoji y el nombre "VETERINARIA INACAP".
+        -->
         <a class="navbar-brand fw-bold" href="/index.html">🐾 VETERINARIA INACAP</a>
         
+        <!-- 
+          BOTÓN TOGGLER (hamburguesa) para pantallas pequeñas.
+          Clases:
+            navbar-toggler -> Estilo del botón colapsable.
+          Atributos data-bs-* (JavaScript de Bootstrap):
+            data-bs-toggle="collapse" -> Activa el comportamiento de colapso.
+            data-bs-target="#menuNav" -> Apunta al elemento con id="menuNav" que se va a colapsar.
+            aria-controls="menuNav" -> Accesibilidad: indica qué elemento controla.
+            aria-expanded="false" -> Estado inicial: no expandido.
+            aria-label="Toggle navigation" -> Etiqueta para lectores de pantalla.
+        -->
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menuNav" aria-controls="menuNav" aria-expanded="false" aria-label="Toggle navigation">
+            <!-- Icono de hamburguesa (tres líneas horizontales) -->
             <span class="navbar-toggler-icon"></span>
         </button>
 
+        <!-- 
+          CONTENIDO COLAPSABLE.
+          .collapse.navbar-collapse -> Contenedor que se muestra/oculta.
+          id="menuNav" -> identificador usado por data-bs-target del botón.
+        -->
         <div class="collapse navbar-collapse" id="menuNav">
+            <!-- 
+              Lista de enlaces de navegación.
+              .navbar-nav -> Estilo de lista para la barra.
+              .ms-auto -> Margin-left automático (en Bootstrap 5 usa "start"/"end", ms = margin-start).
+                         Empuja la lista hacia la derecha (alineación a la derecha).
+            -->
             <ul class="navbar-nav ms-auto">
+                <!-- Elemento de menú: Inicio -->
                 <li class="nav-item">
+                    <!-- .nav-link -> Estilo para enlaces de la barra. -->
                     <a class="nav-link" href="/index.html">Inicio</a>
                 </li>
+                <!-- Elemento de menú: Contacto -->
                 <li class="nav-item">
                     <a class="nav-link" href="/pages/contacto.html">Contacto</a>
                 </li>

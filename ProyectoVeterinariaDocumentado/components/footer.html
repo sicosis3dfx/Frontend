@@ -1,16 +1,57 @@
+<!-- 
+  FOOTER: Pie de página con información de contacto y copyright.
+  Estructura basada en grid de Bootstrap (row/col).
+-->
+
+<!-- 
+  <footer> elemento semántico para el pie.
+  Clases:
+    bg-dark -> Fondo oscuro
+    text-white -> Color de texto blanco (hereda en los hijos que no tengan otro color)
+    pt-5 -> Padding-top de 5 (3rem, 48px aprox.)
+    pb-3 -> Padding-bottom de 3 (1rem, 16px aprox.)
+-->
 <footer class="bg-dark text-white pt-5 pb-3">
     <div class="container">
+        <!-- 
+          .row -> Fila de grid de Bootstrap.
+          Cada fila se divide en 12 columnas virtuales.
+        -->
         <div class="row">
+            <!-- 
+              Columna para "Sobre Nosotros".
+              .col-md-6 -> En pantallas medianas (md, ≥768px) ocupa 6 columnas (50% del ancho).
+                           En pantallas más chicas, por defecto ocupa el 100% (stack).
+            -->
             <div class="col-md-6">
                 <h5>Sobre Nosotros</h5>
+                <!-- 
+                  Texto secundario:
+                  .small -> Tamaño de fuente reducido (<small>)
+                  .text-secondary -> Color de texto secundario (gris claro)
+                -->
                 <p class="small text-secondary">Sistema de gestión veterinaria desarrollado para la evaluación 2.</p>
             </div>
+            <!-- 
+              Columna para "Contacto".
+              .col-md-6 -> También 50% en md o superior.
+              .text-end -> Alinear texto a la derecha (end = derecha en modo LTR).
+            -->
             <div class="col-md-6 text-end">
                 <h5>Contacto</h5>
                 <p class="small text-secondary">angelo.zamora@inacapmail.cl - alexander.cortes16@inacapmail.cl  | 2026</p>
             </div>
         </div>
+        <!-- 
+          <hr> línea horizontal separadora.
+          .border-secondary -> Color del borde secundario (gris).
+        -->
         <hr class="border-secondary">
+        <!-- 
+          Párrafo centrado con copyright.
+          .text-center -> Centrar texto horizontalmente.
+          .small -> Texto pequeño.
+        -->
         <p class="text-center small">© Alexander Cortés | Angelo Zamora - Estudiantes de Ingeniería en Informática</p>
     </div>
 </footer>

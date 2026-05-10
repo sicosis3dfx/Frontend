@@ -1,29 +1,52 @@
+<!-- 
+  inicio.html - Página de inicio o bienvenida.
+  Muestra servicios en tarjetas y un llamado a la acción para ir al panel de registro.
+  No tiene scripts propios; solo carga app.js para nav/footer.
+-->
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Inicio - Veterinaria Central</title>
+    
+    <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Estilos propios (ruta relativa a la carpeta pages) -->
     <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
+    <!-- Navbar cargado por app.js -->
     <div id="nav-container"></div>
 
     <main class="container my-5">
-        <div class="text-center mb-5 animar">
+        <!-- Encabezado centrado con clases Bootstrap -->
+        <div class="text-center mb-5 animar"> <!-- text-center: centra texto; mb-5: margen inferior -->
+            <!-- 
+              .display-4 -> Título grande y con estilo más ligero (tamaño display).
+              .fw-bold -> negrita.
+              .text-primary -> color azul (primario).
+            -->
             <h1 class="display-4 fw-bold text-primary">Bienvenidos a Veterinaria Central</h1>
+            <!-- .lead -> párrafo destacado: tamaño de fuente ligeramente mayor y peso más fino -->
             <p class="lead">Cuidamos a tus mejores amigos con tecnología y corazón.</p>
         </div>
 
-        <div class="row g-4">
-            <div class="col-md-4 animar">
-                <div class="tarjeta text-center h-100">
-                    <div class="fs-1 mb-3">🩺</div>
+        <!-- Fila de 3 tarjetas de servicios -->
+        <div class="row g-4"> <!-- g-4: gutter (espacio entre columnas) -->
+            
+            <!-- Tarjeta 1 -->
+            <div class="col-md-4 animar"> <!-- En tablet/escritorio (md) ocupa 4 columnas = 1/3 del ancho -->
+                <div class="tarjeta text-center h-100"> <!-- .tarjeta: clase propia; .h-100: altura 100% para igualar tarjetas -->
+                    <div class="fs-1 mb-3">🩺</div> <!-- .fs-1: tamaño de fuente muy grande para el ícono -->
                     <h3 class="h5 fw-bold">Medicina General</h3>
                     <p class="text-secondary small">Consultas preventivas, vacunas y desparasitaciones para todo tipo de mascotas.</p>
                 </div>
             </div>
+            
+            <!-- Tarjeta 2 -->
             <div class="col-md-4 animar">
                 <div class="tarjeta text-center h-100">
                     <div class="fs-1 mb-3">🧪</div>
@@ -31,6 +54,8 @@
                     <p class="text-secondary small">Exámenes de sangre y diagnósticos rápidos para asegurar la salud de tu compañero.</p>
                 </div>
             </div>
+            
+            <!-- Tarjeta 3 -->
             <div class="col-md-4 animar">
                 <div class="tarjeta text-center h-100">
                     <div class="fs-1 mb-3">✂️</div>
@@ -40,15 +65,41 @@
             </div>
         </div>
 
+        <!-- Llamado a la acción (Call To Action) con fondo azul -->
         <div class="mt-5 p-5 bg-primary text-white rounded-4 shadow animar text-center">
+            <!-- 
+              Clases aplicadas:
+              - mt-5: margen superior grande.
+              - p-5: padding grande (relleno interior).
+              - bg-primary: fondo del color primario de Bootstrap (azul).
+              - text-white: texto blanco.
+              - rounded-4: bordes redondeados de nivel 4.
+              - shadow: sombra para dar profundidad.
+              - animar: clase personalizada de animación CSS.
+            -->
             <h2>¿Listo para registrar a tu mascota?</h2>
             <p>Accede a nuestro panel de gestión y mantén un control profesional.</p>
+            
+            <!-- 
+              Botón que es un enlace.
+              .btn .btn-light -> botón con fondo claro.
+              .btn-lg -> botón de tamaño grande.
+              fw-bold -> texto en negrita.
+              mt-3 -> margen superior.
+              href="../index.html" -> enlace a la página de gestión (index.html en la raíz).
+            -->
             <a href="../index.html" class="btn btn-light btn-lg fw-bold mt-3">Ir al Panel de Registro</a>
         </div>
     </main>
 
+    <!-- Footer cargado por app.js -->
     <div id="footer-container"></div>
 
+    <!-- 
+      Solo se carga app.js. No se incluye bootstrap.bundle.js aquí.
+      Si el navbar necesita el toggler, app.js debería encargarse de eso o el mismo nav.html
+      no funciona la hamburguesa en esta página. Es un detalle a tener en cuenta.
+    -->
     <script src="../js/app.js"></script>
 </body>
 </html>

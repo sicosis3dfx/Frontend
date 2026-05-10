@@ -1,80 +1,140 @@
+/* 
+   style.css - Hoja de estilos personalizada para el proyecto Veterinaria Central.
+   Complementa a Bootstrap 5. Define colores, animaciones, el carrusel de imágenes
+   y las tarjetas de contenido.
+*/
+
+/* 
+   :root es una pseudo-clase que representa el elemento raíz del documento (html).
+   Aquí se definen variables CSS (custom properties) globales.
+   Las variables permiten cambiar colores de todo el sitio modificando solo estos valores.
+*/
 :root {
-  --color-fondo: #5fb8bb;
-  --color-tarjeta: #ffffff;
-  --color-borde: #dee2e6;
-  --color-texto: #333;
+  --color-fondo: #5fb8bb;       /* Color de fondo principal (verde azulado claro) */
+  --color-tarjeta: #ffffff;     /* Color de fondo de las tarjetas (blanco) */
+  --color-borde: #dee2e6;       /* Color de los bordes (gris claro similar a Bootstrap) */
+  --color-texto: #333;          /* Color de texto principal (gris oscuro) */
 }
 
-
+/* Estilos base para todo el cuerpo de la página */
 body {
-   background-color: var(--color-fondo);
-   color: var(--color-texto);
-   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+   background-color: var(--color-fondo);  /* Usa la variable de fondo definida arriba */
+   color: var(--color-texto);             /* Color de texto general */
+   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Fuente sans-serif moderna */
 }
 
+/* 
+   Contenedor principal del carrusel de imágenes (header en index.html).
+   Tiene clase .nav-carrusel (no es un nav real, es una sección de presentación).
+*/
 .nav-carrusel {
-  position: relative;
-  width: 100%;
-  height: 650px;
-  overflow: hidden;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: var(--color-fondo); 
+  position: relative;      /* Necesario para que los botones con position: absolute se posicionen respecto a este contenedor */
+  width: 100%;             /* Ocupa todo el ancho disponible */
+  height: 650px;           /* Altura fija grande para mostrar las imágenes */
+  overflow: hidden;        /* Recorta cualquier contenido que sobresalga (útil con imágenes grandes) */
+  display: flex;           /* Activa el modelo de caja flexible */
+  align-items: center;     /* Centra verticalmente el contenido (la imagen) */
+  justify-content: center; /* Centra horizontalmente el contenido */
+  background-color: var(--color-fondo); /* Color de fondo de respaldo mientras carga la imagen */
 }
 
+/* Estilos para la imagen dentro del carrusel */
 .nav-carrusel img {
-  width: auto; 
-  height: 100%;
-  max-width: 100%;
-  object-fit: contain;
-  object-position: center top; 
-  transition: opacity 0.5s ease-in-out;
-  image-rendering: -webkit-optimize-contrast;
+  width: auto;              /* Anchura automática para no deformar la imagen */
+  height: 100%;             /* Altura igual al contenedor (650px) */
+  max-width: 100%;          /* Evita que la imagen exceda el ancho del contenedor */
+  object-fit: contain;      /* La imagen se escala para ajustarse completamente dentro del área, sin recortarse */
+  object-position: center top; /* La posiciona centrada horizontalmente y alineada al borde superior verticalmente */
+  transition: opacity 0.5s ease-in-out; /* Suaviza el cambio de opacidad (se usa con la clase .fade-out) */
+  image-rendering: -webkit-optimize-contrast; /* Mejora la nitidez en navegadores webkit (Chrome, Safari) */
 }
 
+/* 
+   Media query: se aplica cuando el ancho de la pantalla es igual o menor a 1000px.
+   En pantallas más pequeñas, la imagen se comporta diferente para adaptarse mejor.
+*/
 @media (max-width: 1000px) {
   .nav-carrusel img {
-    width: 100%;
-    object-fit: cover;
+    width: 100%;            /* La imagen ocupa todo el ancho */
+    object-fit: cover;      /* La imagen cubre todo el área, recortándose si es necesario para no dejar espacios vacíos */
   }
 }
 
+/* 
+   Clase que se agrega/elimina mediante JavaScript para producir el efecto de transición.
+   Cuando la imagen tiene esta clase, se vuelve transparente (opacity: 0).
+   La transición de opacidad definida en la imagen hace que el cambio sea gradual.
+*/
 .fade-out { opacity: 0; }
+
+/* 
+   Botones de flecha (izquierda/derecha) del carrusel.
+   Son elementos personalizados, no usan Bootstrap.
+*/
 .btn-flecha {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  background: rgba(0,0,0,0.6);
+  position: absolute;        /* Permite ubicarlos libremente dentro del contenedor con position: relative */
+  top: 50%;                  /* Posiciona el borde superior a la mitad de la altura del contenedor */
+  transform: translateY(-50%); /* Corrige el centrado vertical moviendo hacia arriba la mitad de su propia altura */
+  background: rgba(0,0,0,0.6); /* Fondo negro semi-transparente */
   color: white;
   border: none;
   padding: 15px 20px;
   font-size: 20px;
-  cursor: pointer;
-  z-index: 10;
-  border-radius: 50%;
+  cursor: pointer;           /* Cambia el cursor a mano/pointer */
+  z-index: 10;               /* Asegura que estén sobre la imagen */
+  border-radius: 50%;        /* Bordes completamente redondeados (círculo si ancho y alto similares) */
 }
+
+/* Posicionamiento específico para la flecha izquierda */
 .izq { left: 20px; }
+
+/* Posicionamiento específico para la flecha derecha */
 .der { right: 20px; }
 
-/* TARJETAS PROYECTO 2 */
+/* 
+   Estilos para las tarjetas de contenido (usadas en formularios, listados, servicios).
+   Clase .tarjeta (personalizada, no de Bootstrap).
+*/
 .tarjeta {
-  background-color: var(--color-tarjeta);
-  border: 1px solid var(--color-borde);
-  padding: 2rem;
-  border-radius: 15px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  background-color: var(--color-tarjeta); /* Fondo blanco definido en :root */
+  border: 1px solid var(--color-borde);   /* Borde sutil gris claro */
+  padding: 2rem;                          /* Espaciado interior generoso (32px aproximadamente) */
+  border-radius: 15px;                    /* Bordes redondeados no tan pronunciados */
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05); /* Sombra suave para dar sensación de elevación */
 }
 
+/* 
+   Clase .animar: utilizada en elementos que deben tener una animación de entrada.
+   Inicialmente el elemento es invisible (opacity: 0) y desplazado hacia abajo (translateY(20px)).
+   Luego la animación "subir" lo lleva a su estado final.
+*/
 .animar {
   opacity: 0;
   transform: translateY(20px);
-  animation: subir 0.6s ease forwards;
+  animation: subir 0.6s ease forwards; /* 
+    - 'subir' es el nombre de la animación definida con @keyframes.
+    - 0.6s duración.
+    - ease: comienza rápido y desacelera.
+    - forwards: mantiene el estado final de la animación (opacity:1, translateY:0) al terminar.
+  */
 }
-@keyframes subir { to { opacity: 1; transform: translateY(0); } }
 
+/* Definición de la animación "subir" */
+@keyframes subir { 
+  to { 
+    opacity: 1; 
+    transform: translateY(0); 
+  } 
+}
+/* Esta animación lleva al elemento desde su estado inicial (definido en .animar) 
+   hasta ser completamente visible y en su posición original. */
+
+/* 
+   .error-campo: clase aplicada a los <small> de error en el formulario.
+   Por defecto están vacíos, pero cuando JS añade un mensaje de error se muestran con estilo rojo (text-danger de Bootstrap).
+   Aquí se asegura que el mensaje ocupe una línea completa (display: block) y tenga un pequeño margen superior.
+*/
 .error-campo {
-    display: block;
-    margin-top: 0.2rem;
+    display: block;         /* Para que el <small> se comporte como bloque y ocupe toda la línea */
+    margin-top: 0.2rem;     /* Separación respecto al campo de entrada */
 }
-
