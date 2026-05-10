@@ -1,4 +1,3 @@
-
 let mascotas = JSON.parse(localStorage.getItem('veterinaria_db')) || [];
 let editando = false;
 let idEditando = null;
@@ -160,7 +159,20 @@ const buscador = document.getElementById('filtroTipo');
 if (buscador) {
     buscador.addEventListener('input', (e) => {
         const val = e.target.value.toLowerCase();
-        render(mascotas.filter(m => m.tipo.toLowerCase().includes(val)));
+        
+        const filtrados = mascotas.filter(m => {
+            const nombreM = m.nombreMascota.toLowerCase();
+            const nombreD = m.nombreDueno.toLowerCase();
+            const tipoM = m.tipo.toLowerCase();
+            const telM = m.telefono.toString();
+
+            return nombreM.includes(val) || 
+                   nombreD.includes(val) || 
+                   tipoM.includes(val) || 
+                   telM.includes(val);
+        });
+
+        render(filtrados);
     });
 }
 
@@ -191,5 +203,4 @@ window.prepararEdicion = (id) => {
     editando = true;
     idEditando = id;
     document.getElementById('btnGuardar').textContent = 'Actualizar Datos';
-    window.scrollTo(0, 0);
 };
