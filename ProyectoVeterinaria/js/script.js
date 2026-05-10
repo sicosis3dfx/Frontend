@@ -4,10 +4,10 @@ let editando = false;
 let idEditando = null;
 
 const imgs = [
-    "source/img/1.png",
-    "source/img/2.png",
-    "source/img/3.png",
-    "source/img/4.png"
+    "source/img/1.jpg",
+    "source/img/2.jpg",
+    "source/img/3.jpg",
+    "source/img/4.jpg"
 ];
 let idImg = 0;
 
