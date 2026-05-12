@@ -145,8 +145,8 @@ function validar({ nombreMascota, nombreDueno, telefono, edad, tipo }) {
      * - Debe ser un número entre 1 y 30 inclusive.
      */
     const edadNum = parseInt(edad, 10);
-    if (!edad || isNaN(edadNum) || edadNum < 1 || edadNum > 30) {
-        mostrarError('errorEdad', 'Edad inválida (1-30).');
+    if (!edad || isNaN(edadNum) || edadNum < 1 || edadNum > 100) {
+        mostrarError('errorEdad', 'Edad inválida (1-100).');
         ok = false;
     }
 
