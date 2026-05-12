@@ -1,50 +1,39 @@
 /*
- * app.js - Carga dinámica de componentes comunes (navbar y footer).
- * Se ejecuta cuando el DOM está completamente cargado.
+ * app.js - Este archivo se encarga de "armar" la página.
+ * Trae las partes que se repiten (menú y pie de página) sin que tengamos que escribirlas 10 veces.
  */
 
 /*
- * Función cargarComponente: carga un archivo HTML y lo inserta dentro del elemento con el id indicado.
- * Parámetros:
- *   id     : string con el id del contenedor donde se insertará el HTML.
- *   archivo: nombre del archivo (ej: "nav.html") ubicado en la carpeta "components".
- *
- * Funcionamiento:
- *   1. Determina la ruta correcta al archivo según si la página actual está en la raíz o en /pages/.
- *   2. Realiza una petición HTTP con fetch para obtener el contenido del archivo.
- *   3. Convierte la respuesta a texto.
- *   4. Inserta ese HTML dentro del contenedor con id 'id'.
- *   5. Si hay error, lo muestra en consola.
+ * Función cargarComponente: busca un pedazo de HTML y lo mete en la página.
+ * - id: es el hueco o contenedor donde vamos a poner el código.
+ * - archivo: es el nombre de la pieza que queremos traer (ej: el menú).
  */
 function cargarComponente(id, archivo) {
     /*
-     * window.location.pathname devuelve la ruta de la URL actual (ej: "/index.html" o "/pages/contacto.html").
-     * .includes("/pages/") verifica si la ruta contiene "/pages/".
-     * Si la página está dentro de /pages/, la ruta del componente será "../components/archivo".
-     * Si está en la raíz, la ruta será "components/archivo".
+     * Aquí el programa revisa en qué carpeta estamos. 
+     * Si estamos en una página secundaria (dentro de /pages/), tiene que retroceder un paso (../) 
+     * para encontrar la carpeta de los componentes.
      */
     let ruta = window.location.pathname.includes("/pages/") 
         ? `../components/${archivo}` 
         : `components/${archivo}`;
     
     /*
-     * fetch es una API moderna para hacer peticiones HTTP.
-     * Devuelve una Promesa.
-     * .then(res => res.text()) : convierte la respuesta en texto (HTML).
-     * .then(data => { ... })   : recibe el texto y lo asigna como contenido interno del elemento.
-     * .catch(err => ...)       : captura errores de red o de lectura.
+     * fetch: es como mandar un recadero a buscar el archivo.
+     * 1. Va a buscar el archivo a la carpeta.
+     * 2. Recibe el contenido y lo convierte en texto.
+     * 3. Busca el hueco en la página (id) y pega ese texto adentro.
+     * 4. Si el archivo no existe o se pierde el recadero, avisa del error.
      */
     fetch(ruta)
         .then(res => res.text())
         .then(data => { document.getElementById(id).innerHTML = data; })
-        .catch(err => console.error("Error cargando componente:", err));
+        .catch(err => console.error("No se pudo cargar la pieza:", err));
 }
 
 /*
- * Evento DOMContentLoaded: se dispara cuando el HTML inicial ha sido completamente cargado y parseado,
- * sin esperar a hojas de estilo, imágenes o subframes.
- * Es el momento ideal para manipular el DOM.
- * Aquí se cargan el nav y el footer llamando a cargarComponente con los ids definidos en el HTML.
+ * Esto le dice al navegador: "Apenas termines de leer el HTML, haz esto".
+ * Aquí es donde mandamos a llamar a la función de arriba para cargar el menú y el footer.
  */
 document.addEventListener("DOMContentLoaded", () => {
     cargarComponente("nav-container", "nav.html");

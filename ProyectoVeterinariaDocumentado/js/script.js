@@ -1,41 +1,25 @@
 /*
- * script.js - Lógica de la aplicación de gestión de mascotas (index.html).
- * Incluye:
- *   - Carrusel de imágenes manual/automático.
- *   - CRUD completo usando localStorage.
- *   - Validación de campos antes de guardar.
- *   - Renderizado dinámico de la tabla con eventos delegados.
- *   - Filtro por cualquier campo.
+ * script.js - Aquí está toda la lógica de la página.
+ * Controla: las fotos que pasan solas, guardar mascotas, borrarlas y editarlas.
  */
 
-/* ==================== INICIALIZACIÓN DE DATOS ==================== */
+/* ==================== CONFIGURACIÓN INICIAL ==================== */
 
 /*
- * mascotas: array que contiene todos los registros.
- * Se inicializa desde localStorage. Si existe la clave 'veterinaria_db',
- * se convierte de JSON a objeto JS con JSON.parse.
- * Si no existe (primera visita), se asigna un array vacío [].
- * 
- * localStorage es un almacenamiento persistente en el navegador (sobrevive a recargas).
- * Los datos se guardan como string, por eso usamos JSON.stringify al guardar y JSON.parse al leer.
+ * mascotas: es nuestra "lista oficial" de animales.
+ * Intentamos leer lo que hay guardado en el disco duro del navegador (localStorage).
+ * JSON.parse: traduce la lista de "idioma texto" a "idioma lista de programación".
+ * Si la lista está vacía o es la primera vez, empezamos con una lista nueva [].
  */
 let mascotas = JSON.parse(localStorage.getItem('veterinaria_db')) || [];
 
-/*
- * Variables de control de edición:
- * - editando (boolean): indica si el formulario está en modo edición.
- * - idEditando (number): guarda el id de la mascota que se está editando.
- *   Se usan para saber si al enviar el formulario debemos actualizar o crear un nuevo registro.
- */
+/* Estas variables sirven para avisarle al programa si estamos creando alguien nuevo o editando a alguien que ya existe. */
 let editando = false;
 let idEditando = null;
 
-/* ==================== CARRUSEL DE IMÁGENES ==================== */
+/* ==================== FOTOS QUE PASAN (CARRUSEL) ==================== */
 
-/*
- * Array con las rutas de las imágenes del carrusel.
- * Se muestran en secuencia.
- */
+/* Lista de fotos que tenemos guardadas en la carpeta de imágenes. */
 const imgs = [
     "source/img/1.jpg",
     "source/img/2.jpg",
@@ -43,57 +27,34 @@ const imgs = [
     "source/img/4.jpg"
 ];
 
-/*
- * idImg: índice de la imagen actualmente visible.
- */
+/* Es el número de la foto que se está viendo ahora (empieza en 0). */
 let idImg = 0;
 
-/*
- * Función cambiarImg: cambia la imagen del carrusel.
- * Parámetro n: número de posiciones a avanzar (1 para siguiente, -1 para anterior).
- *
- * Lógica:
- *   1. Obtiene el elemento <img> con id "imagenCarrusel".
- *   2. Calcula el nuevo índice. La fórmula matemática (idImg + n + imgs.length) % imgs.length
- *      hace que el índice sea cíclico (si pasa del último vuelve al primero y viceversa).
- *      % es el operador módulo (resto de división).
- *   3. Añade la clase "fade-out" para hacer la imagen transparente (transición CSS).
- *   4. Espera 500ms (lo que dura la transición) y luego cambia el src y quita "fade-out".
- */
+/* Función para cambiar la foto cuando apretamos las flechas. */
 function cambiarImg(n) {
     const el = document.getElementById("imagenCarrusel");
-    if (!el) return; // Si no existe el elemento (otras páginas), sale de la función.
+    if (!el) return; // Si no hay fotos en esta página, no hagas nada.
     
+    /* Esta cuenta matemática hace que cuando llegues a la última foto, la siguiente sea la primera otra vez. */
     idImg = (idImg + n + imgs.length) % imgs.length;
     
-    // Inicia el fundido de salida
+    /* Le ponemos un efecto de "fundido" (se vuelve transparente) para que el cambio no sea brusco. */
     el.classList.add("fade-out");
     
-    /*
-     * setTimeout ejecuta una función después de un retardo (en milisegundos).
-     * Aquí espera 500ms para que el fade-out termine antes de cambiar la imagen.
-     */
+    /* Esperamos medio segundo (500ms) a que se ponga transparente para cambiar la foto y volver a mostrarla. */
     setTimeout(() => {
-        el.src = imgs[idImg];              // Cambia la fuente de la imagen
-        el.classList.remove("fade-out");   // Quita la clase para que vuelva a ser opaca
+        el.src = imgs[idImg];              
+        el.classList.remove("fade-out");   
     }, 500);
 }
 
-/*
- * Se asignan las funciones al objeto window para que sean accesibles desde el onclick en HTML.
- * Las funciones flecha (arrow functions) son una forma corta de escribir funciones anónimas.
- * () => cambiarImg(1) es lo mismo que function() { cambiarImg(1); }
- */
+/* Dejamos estas funciones listas para que los botones de las flechas en el HTML las puedan usar. */
 window.siguienteImagen = () => cambiarImg(1);
 window.anteriorImagen = () => cambiarImg(-1);
 
-/* ==================== MANEJO DEL FORMULARIO ==================== */
+/* ==================== CONTROL DEL FORMULARIO ==================== */
 
-/*
- * obtenerCampos: Retorna un objeto con los valores actuales de los inputs del formulario,
- * aplicando .trim() (quita espacios en blanco al inicio y final).
- * Se usa tanto para crear como para actualizar.
- */
+/* Función que va al formulario y recolecta todo lo que el usuario escribió, quitando espacios de sobra. */
 function obtenerCampos() {
     return {
         nombreMascota: document.getElementById('nombreMascota').value.trim(),
@@ -104,23 +65,14 @@ function obtenerCampos() {
     };
 }
 
-/*
- * validar: Recibe los datos y comprueba que cumplan las reglas.
- * Retorna true si todo es válido, false en caso contrario.
- * También muestra mensajes de error en los <small> correspondientes.
- */
+/* Función "Guardia de Seguridad": revisa que no falte nada y que los datos sean correctos. */
 function validar({ nombreMascota, nombreDueno, telefono, edad, tipo }) {
-    let ok = true; // Bandera para saber si hay errores.
+    let ok = true; 
   
-    // Limpia todos los mensajes de error previos (elementos con clase .error-campo).
+    /* Antes de empezar, borramos todos los mensajes de error rojos que quedaron de la vez anterior. */
     document.querySelectorAll('.error-campo').forEach(e => e.textContent = '');
 
-    /*
-     * Validación del nombre de la mascota:
-     * - Debe tener al menos 2 caracteres.
-     * - Solo puede contener letras y espacios (expresión regular /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/).
-     *   ^ : inicio, $ : fin, [] : clase de caracteres, + : uno o más.
-     */
+    /* Reglas para el nombre de la mascota y del dueño: que no sea una sola letra y que no lleve números. */
     if (nombreMascota.length < 2) {
         mostrarError('errorNombre', 'Mínimo 2 caracteres.');
         ok = false;
@@ -129,7 +81,6 @@ function validar({ nombreMascota, nombreDueno, telefono, edad, tipo }) {
         ok = false;
     }
 
-    // Validación del nombre del dueño (misma lógica)
     if (nombreDueno.length < 2) {
         mostrarError('errorDueno', 'Mínimo 2 caracteres.');
         ok = false;
@@ -138,12 +89,7 @@ function validar({ nombreMascota, nombreDueno, telefono, edad, tipo }) {
         ok = false;
     }
 
-    /*
-     * Validación de edad:
-     * - parseInt convierte el string a número entero (base 10).
-     * - isNaN comprueba si es "Not a Number".
-     * - Debe ser un número entre 1 y 30 inclusive.
-     */
+    /* Regla para la edad: tiene que ser un número entre 1 y 100. */
     const edadNum = parseInt(edad, 10);
     if (!edad || isNaN(edadNum) || edadNum < 1 || edadNum > 100) {
         mostrarError('errorEdad', 'Edad inválida (1-100).');
@@ -155,12 +101,7 @@ function validar({ nombreMascota, nombreDueno, telefono, edad, tipo }) {
         ok = false;
     }
 
-    /*
-     * Validación del teléfono (si existe el campo):
-     * - /^\d{8,15}$/ : \d significa dígito (0-9), {8,15} indica entre 8 y 15 dígitos.
-     * - .test() comprueba si el string cumple el patrón.
-     * Si no cumple, muestra error.
-     */
+    /* Regla para el teléfono: que tenga entre 8 y 15 números seguidos. */
     if (telefono !== undefined && !/^\d{8,15}$/.test(telefono)) {
         mostrarError('errorTelefono', 'Teléfono inválido (8-15 dígitos).');
         ok = false;
@@ -169,32 +110,24 @@ function validar({ nombreMascota, nombreDueno, telefono, edad, tipo }) {
     return ok;
 }
 
-/*
- * mostrarError: escribe un mensaje de error en el <small> con el id dado.
- */
+/* Función para poner el texto rojo de error donde corresponda. */
 function mostrarError(idSpan, mensaje) {
     const span = document.getElementById(idSpan);
     if (span) span.textContent = mensaje;
 }
 
-/* ==================== ALMACENAMIENTO ==================== */
+/* ==================== GUARDADO Y CREACIÓN ==================== */
 
-/*
- * guardarStorage: convierte el array 'mascotas' a JSON y lo guarda en localStorage.
- * JSON.stringify convierte un objeto/array JS a string.
- * Se llama cada vez que hay cambios (crear, editar, eliminar).
- */
+/* Guarda nuestra lista de mascotas en la memoria del navegador. */
 function guardarStorage() {
+    /* Traducimos la lista de "idioma programa" a "idioma texto" para que el navegador la pueda guardar. */
     localStorage.setItem('veterinaria_db', JSON.stringify(mascotas));
 }
 
-/*
- * crearMascota: Recibe los datos del formulario y devuelve un objeto nuevo con un id único.
- * Date.now() retorna el número de milisegundos desde el 1 de enero de 1970 (suficiente como id único).
- */
+/* Esta función fabrica una "ficha" nueva para una mascota. */
 function crearMascota(datos) {
     return {
-        id: Date.now(),
+        id: Date.now(), // Le pone un código único basado en la hora exacta (milisegundos).
         nombreMascota: datos.nombreMascota,
         nombreDueno: datos.nombreDueno,
         telefono: datos.telefono || '',
@@ -203,25 +136,19 @@ function crearMascota(datos) {
     };
 }
 
-/* ==================== RENDERIZADO DE LA TABLA ==================== */
+/* ==================== DIBUJAR LA TABLA (RENDER) ==================== */
 
-/*
- * render: pinta la tabla con los datos proporcionados (por defecto, 'mascotas').
- * - Vacía el tbody.
- * - Recorre el array con forEach.
- * - Crea un elemento <tr> y lo llena con innerHTML.
- * - Las últimas dos celdas son botones con data-id para identificar el registro.
- * - Usa clases Bootstrap: table, fw-bold, text-primary, badge, btn, btn-sm, etc.
- */
+/* Esta función toma la lista de mascotas y la dibuja en la pantalla. */
 function render(datos = mascotas) {
     const tbody = document.querySelector('#tablaMascotas tbody');
-    if (!tbody) return; // Si no hay tabla (otras páginas), no hace nada.
+    if (!tbody) return; 
     
-    tbody.innerHTML = ''; // Limpiar tabla
+    tbody.innerHTML = ''; // Borramos lo que había antes para no repetir los nombres.
     
+    /* Por cada mascota en nuestra lista, fabricamos una fila de la tabla. */
     datos.forEach(m => {
         const tr = document.createElement('tr');
-        // Se usa template literal con variables ${}. En teléfono, si está vacío muestra "—".
+        /* Aquí "armamos" la fila con los datos de la mascota y los botones de editar/borrar. */
         tr.innerHTML = `
             <td class="fw-bold text-primary">${m.nombreMascota}</td>
             <td>${m.nombreDueno}</td>
@@ -232,124 +159,91 @@ function render(datos = mascotas) {
                 <button class="btn btn-sm btn-outline-warning me-1 btn-editar" data-id="${m.id}">✏️</button>
                 <button class="btn btn-sm btn-outline-danger btn-eliminar" data-id="${m.id}">🗑️</button>
             </td>`;
-        tbody.appendChild(tr);
+        tbody.appendChild(tr); // Pegamos la fila terminada en la tabla.
     });
 }
 
-/* 
- * Evento delegado sobre el tbody: en lugar de poner listener a cada botón (que aún no existen),
- * escuchamos el click en el tbody y detectamos qué botón fue clickeado usando closest().
- * closest('button') sube por los ancestros hasta encontrar un button.
- * 
- * dataset.id obtiene el valor del atributo data-id del botón, convertido a número.
- * Luego según la clase del botón, llamamos a prepararEdicion o eliminar.
- */
+/* Cuando la página termina de cargar, activamos las funciones de los botones de la tabla. */
 document.addEventListener('DOMContentLoaded', () => {
     const tbody = document.querySelector('#tablaMascotas tbody');
     if (tbody) {
         tbody.addEventListener('click', (e) => {
+            /* Buscamos si el clic fue en un botón de editar o borrar. */
             const btn = e.target.closest('button');
-            if (!btn) return; // Si no se hizo clic en un botón, salir.
+            if (!btn) return; 
             
-            const id = parseInt(btn.dataset.id, 10);
+            const id = parseInt(btn.dataset.id, 10); // Obtenemos el "RUT" o código de la mascota.
             
-            // btn.classList.contains verifica si el botón tiene esa clase.
             if (btn.classList.contains('btn-editar')) prepararEdicion(id);
             if (btn.classList.contains('btn-eliminar')) eliminar(id);
         });
     }
 
-    // Render inicial de la tabla
-    render();
+    render(); // Dibujamos la lista apenas entramos.
     
-    // Carrusel automático: cambia de imagen cada 6 segundos (6000 ms).
+    /* Configuración para que las fotos pasen solas cada 6 segundos. */
     setInterval(siguienteImagen, 6000);
 });
 
-/* ==================== ENVÍO DEL FORMULARIO (CREAR/EDITAR) ==================== */
+/* ==================== BOTÓN GUARDAR ==================== */
 
 const formulario = document.getElementById('formMascota');
 if (formulario) {
-    /*
-     * Escucha el evento submit del formulario.
-     * e.preventDefault() evita que se recargue la página.
-     * Obtiene los datos, valida. Si no es válido, se detiene.
-     * Si está en modo edición, busca el índice del registro con findIndex
-     * y actualiza el objeto con el operador spread (...).
-     * Si es nuevo, lo agrega al array con push.
-     * Finalmente guarda en localStorage, vuelve a renderizar y resetea el formulario.
-     */
+    /* Cuando el usuario aprieta "Guardar Registro": */
     formulario.addEventListener('submit', (e) => {
-        e.preventDefault();
+        e.preventDefault(); // Evita que la página se recargue sola.
         const datos = obtenerCampos();
-        if (!validar(datos)) return;
+        if (!validar(datos)) return; // Si hay errores, no sigas.
 
         if (editando && idEditando) {
-            // Buscar el índice del elemento que coincide con idEditando
+            /* Si estamos editando, buscamos a la mascota en la lista y cambiamos sus datos antiguos por los nuevos. */
             const idx = mascotas.findIndex(m => m.id === idEditando);
             if (idx !== -1) {
-                // Mezcla los datos antiguos con los nuevos (sobrescribe los campos)
                 mascotas[idx] = { ...mascotas[idx], ...datos, edad: parseInt(datos.edad, 10) };
             }
-            // Salir del modo edición
             editando = false;
             idEditando = null;
             document.getElementById('btnGuardar').textContent = 'Guardar Registro';
         } else {
-            // Agregar nueva mascota
+            /* Si no estamos editando, simplemente agregamos a la mascota nueva al final de la lista. */
             mascotas.push(crearMascota(datos));
         }
 
-        guardarStorage();
-        render();
-        formulario.reset(); // Limpia los campos del formulario
+        guardarStorage(); // Guardamos los cambios.
+        render(); // Actualizamos la tabla en pantalla.
+        formulario.reset(); // Limpiamos el formulario.
     });
 }
 
-/* ==================== FILTRO DE BÚSQUEDA ==================== */
+/* ==================== FILTRAR / BUSCAR ==================== */
 
 const buscador = document.getElementById('filtroTipo');
 if (buscador) {
-    /*
-     * Cada vez que se escribe en el campo de filtro (evento 'input'),
-     * se filtra el array mascotas.
-     * Se convierten a minúsculas todas las cadenas a comparar.
-     * filter devuelve un nuevo array con los elementos que cumplen la condición.
-     * La condición: el texto escrito esté incluido en nombre, dueño, tipo o teléfono.
-     * Luego se renderiza solo con los filtrados.
-     */
+    /* Mientras el usuario escribe en el buscador: */
     buscador.addEventListener('input', (e) => {
-        const val = e.target.value.toLowerCase();
+        const val = e.target.value.toLowerCase(); // Lo que escribió el usuario en minúsculas.
         
+        /* Creamos una lista temporal que solo tenga a las mascotas que coincidan con lo escrito. */
         const filtrados = mascotas.filter(m => {
-            const nombreM = m.nombreMascota.toLowerCase();
-            const nombreD = m.nombreDueno.toLowerCase();
-            const tipoM = m.tipo.toLowerCase();
-            const telM = m.telefono.toString();
-
-            return nombreM.includes(val) || 
-                   nombreD.includes(val) || 
-                   tipoM.includes(val) || 
-                   telM.includes(val);
+            return m.nombreMascota.toLowerCase().includes(val) || 
+                   m.nombreDueno.toLowerCase().includes(val) || 
+                   m.tipo.toLowerCase().includes(val) || 
+                   m.telefono.toString().includes(val);
         });
 
-        render(filtrados);
+        render(filtrados); // Dibujamos solo los que encontramos.
     });
 }
 
-/* ==================== ELIMINAR REGISTRO ==================== */
+/* ==================== BORRAR UNA MASCOTA ==================== */
 
-/*
- * Se asigna a window para ser accesible desde el onclick (aunque aquí se llama desde el evento delegado).
- * Pide confirmación con confirm() (ventana de diálogo).
- * Si el usuario acepta, elimina del array con filter (crea uno nuevo sin el id dado).
- * Si se estaba editando ese mismo registro, sale del modo edición.
- */
 window.eliminar = (id) => {
+    /* Preguntamos si está seguro antes de borrar. */
     if (confirm('¿Seguro que quieres eliminar este registro?')) {
+        /* Filtramos la lista para dejar fuera a la mascota que queremos borrar. */
         mascotas = mascotas.filter(m => m.id !== id);
         
-        // Si el registro eliminado era el que estábamos editando, reseteamos el formulario
+        /* Si estábamos editando justo a esa mascota, cancelamos la edición. */
         if (idEditando === id) {
             editando = false;
             idEditando = null;
@@ -361,18 +255,14 @@ window.eliminar = (id) => {
     }
 };
 
-/* ==================== PREPARAR EDICIÓN ==================== */
+/* ==================== EDITAR UNA MASCOTA ==================== */
 
-/*
- * Carga los datos del registro seleccionado en el formulario.
- * Cambia el texto del botón a "Actualizar Datos".
- * Establece las variables de edición.
- */
 window.prepararEdicion = (id) => {
+    /* Buscamos a la mascota en la lista usando su código único. */
     const m = mascotas.find(m => m.id === id);
     if (!m) return;
     
-    // Rellenar campos con los valores actuales
+    /* Ponemos sus datos actuales de vuelta en las cajitas del formulario para poder cambiarlos. */
     document.getElementById('nombreMascota').value = m.nombreMascota;
     document.getElementById('nombreDueno').value = m.nombreDueno;
     if (document.getElementById('telefonoDueno')) {
@@ -381,7 +271,7 @@ window.prepararEdicion = (id) => {
     document.getElementById('edadMascota').value = m.edad;
     document.getElementById('tipoMascota').value = m.tipo;
     
-    // Activar modo edición
+    /* Le avisamos al programa que ahora estamos en "Modo Edición". */
     editando = true;
     idEditando = id;
     document.getElementById('btnGuardar').textContent = 'Actualizar Datos';
