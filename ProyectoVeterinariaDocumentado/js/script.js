@@ -172,7 +172,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const btn = e.target.closest('button');
             if (!btn) return; 
             
-            const id = parseInt(btn.dataset.id, 10); // Obtenemos el "RUT" o código de la mascota.
+            const id = parseInt(btn.dataset.id, 10); // Obtenemos código de la mascota.
             
             if (btn.classList.contains('btn-editar')) prepararEdicion(id);
             if (btn.classList.contains('btn-eliminar')) eliminar(id);
