@@ -185,7 +185,7 @@ document.addEventListener('DOMContentLoaded', () => {
     setInterval(siguienteImagen, 6000);
 });
 
-/* ==================== BOTÓN GUARDAR ==================== */
+/* ==================== BOTÓN GUARDAR O EDITAR ==================== */
 
 const formulario = document.getElementById('formMascota');
 if (formulario) {
