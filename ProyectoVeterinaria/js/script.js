@@ -66,8 +66,8 @@ function validar({ nombreMascota, nombreDueno, telefono, edad, tipo }) {
         ok = false;
     }
 
-    if (telefono !== undefined && !/^\d{8,15}$/.test(telefono)) {
-        mostrarError('errorTelefono', 'Teléfono inválido (8-15 dígitos).');
+    if (telefono !== undefined && !/^\d{11}$/.test(telefono)) {
+        mostrarError('errorTelefono', 'Teléfono inválido (11 dígitos).');
         ok = false;
     }
 
